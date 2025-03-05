@@ -28,19 +28,19 @@ namespace Restaurant_Homework_10_11.Data
 
                 // Images for restaurants
                 byte[] restaurantImage1 = File.ReadAllBytes(
-                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant1.jpg");
+                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant1.jpeg");
 
                 byte[] restaurantImage2 = File.ReadAllBytes(
-                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant2.jpg");
+                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant2.jpeg");
 
                 byte[] restaurantImage3 = File.ReadAllBytes(
-                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant3.jpg");
+                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant3.jpeg");
 
                 byte[] restaurantImage4 = File.ReadAllBytes(
-                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant4.jpg");
+                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant4.jpeg");
 
                 byte[] restaurantImage5 = File.ReadAllBytes(
-                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant5.jpg");
+                    $"{webHostEnvironment.WebRootPath}\\images\\Restaurants\\restaurant5.jpeg");
 
 
                 // Dishes
@@ -84,9 +84,7 @@ namespace Restaurant_Homework_10_11.Data
                     Image = File.ReadAllBytes(
                    $"{webHostEnvironment.WebRootPath}\\images\\Dishes\\paella.jpg")
                 };
-
-                //string myLorem = "Dining out at restaurants is more than just a meal; it’s an experience that tantalizes the senses and brings people together. From the moment you step inside, you’re enveloped by the inviting aromas of freshly prepared dishes and the warm ambiance that sets the stage for unforgettable moments. Each restaurant offers a unique culinary journey, whether it’s savoring exotic flavors from around the world or enjoying comforting classics crafted with passion.\r\n\r\nJoining friends or family for a meal creates a special bond, as laughter and conversation flow freely over shared plates. The joy of discovering new favorites, exploring diverse cuisines, and indulging in delightful desserts makes dining out a true celebration of life. So, whether it’s a cozy bistro, a vibrant café, or a fine dining establishment, the magic of restaurants lies in their ability to create lasting memories, one delicious bite at a time.";
-
+                               
 
                 // Restaurants
                 Restaurant rest1 = new Restaurant
