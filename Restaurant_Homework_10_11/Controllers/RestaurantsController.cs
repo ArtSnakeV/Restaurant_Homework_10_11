@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_Homework_10_11.Data;
 using Restaurant_Homework_10_11.Data.Entities;
+using Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels;
 
 namespace Restaurant_Homework_10_11.Controllers
 {
@@ -14,16 +15,51 @@ namespace Restaurant_Homework_10_11.Controllers
     {
         private readonly RestaurantsContext _context;
 
-        public RestaurantsController(RestaurantsContext context)
+        private readonly ILogger _logger; // Added logger
+
+        public RestaurantsController(RestaurantsContext context, ILoggerFactory loggerFactory) // Added logger factory
         {
             _context = context;
+            _logger = loggerFactory.CreateLogger<RestaurantsController>();
         }
 
+        
         // GET: Restaurants
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var restaurantsContext = _context.Restaurants.Include(r => r.SignatureDish);
+        //    return View(await restaurantsContext.ToListAsync());
+        //}
+
+        public async Task<IActionResult> Index(int dishId, string? search)
         {
-            var restaurantsContext = _context.Restaurants.Include(r => r.SignatureDish);
-            return View(await restaurantsContext.ToListAsync());
+            IQueryable<Restaurant> restaurants = _context.Restaurants
+                .Include(c => c.SignatureDish)
+                //.Include(c => c.Dish)
+                .Where(c => c.IsDeleted == false);
+            if (dishId > 0)
+            {
+                restaurants = restaurants.Where(c => c.DishId == dishId);
+            }
+            if (
+            search is not null)
+            {
+                restaurants = restaurants.Where(c => c.Name.Contains(search));
+            }
+            IQueryable<Dish> dishes = _context.Dishes;
+            SelectList dishesSL = new SelectList(
+            items: await dishes.ToListAsync(),
+            dataValueField: "Id",
+            dataTextField: "DishName",
+            selectedValue: dishId);
+            IndexRestaurantsVM vM = new IndexRestaurantsVM
+            {
+                Restaurants = await restaurants.ToListAsync(),
+                DishSL = dishesSL,
+                DishId = dishId,
+                Search = search,
+            };
+            return View(vM);
         }
 
         // GET: Restaurants/Details/5

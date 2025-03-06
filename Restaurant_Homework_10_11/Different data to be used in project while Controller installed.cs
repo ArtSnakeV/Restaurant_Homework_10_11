@@ -14,30 +14,8 @@ namespace Restaurant_Homework_10_11
     }
 }
 
-//// In class controller
-//// RestaurantsController 
 
-//private readonly ILogger _logger;
 
-//// in contstructor
-//ILoggerFactory loggerFactory
-//_logger = loggerFactory.CreateLogger<CatsController>();
-
-////////////////////////////////////
-///// Inside IndexRestaurantsVM.cs
-//using Restaurant_Homework_10_11.Data.Entities;
-//using Microsoft.AspNetCore.Mvc.Rendering;
-
-//namespace....
-//{
-//    public class IndexCatsVM
-//    {
-//        public IEnumerable<Restaurant> Restaurants { get; set; } = default!; // (!) potential error
-//        public SelectList DishSL { get; set; } = default!;
-//        public int DishId { get; set; }
-//        public string? Search { get; set; }
-//    }
-//}
 
 ////////////////////////////////////////
 /// Inside RestaurantsController.Index.cs   page 31
