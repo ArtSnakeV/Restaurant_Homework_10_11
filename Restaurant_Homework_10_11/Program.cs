@@ -1,7 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using Restaurant_Homework_10_11.AutoMapperProfiles;
 using Restaurant_Homework_10_11.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Added to use AutoMapper
+builder.Services.AddAutoMapper(
+    typeof(RestaurantProfile),
+    typeof(DishProfile)
+    );
 
 builder.Services.AddDbContext<RestaurantsContext>(options =>
     options.UseSqlServer(

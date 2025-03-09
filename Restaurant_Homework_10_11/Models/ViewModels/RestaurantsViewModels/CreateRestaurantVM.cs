@@ -4,14 +4,14 @@ using Restaurant_Homework_10_11.Models.DTO;
 
 namespace Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels
 {
-    public class IndexRestaurantsVM
+    public class CreateRestaurantVM
     {
-        //public IEnumerable<Restaurant> Restaurants { get; set; } = default!; // (!) potential error
-        
-        // Using DTO
-        public IEnumerable<RestaurantDTO> Restaurants { get; set; } = default!; 
+        //public Restaurant Restaurant { get; set; } = default!; // (!) potential error
+        public RestaurantDTO Restaurant { get; set; } = default!;
         public SelectList DishSL { get; set; } = default!;
         public int DishId { get; set; }
-        public string? Search { get; set; }
+        public IFormFile image { get; set; } = default!;
     }
 }
+
+

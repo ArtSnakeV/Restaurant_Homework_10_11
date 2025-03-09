@@ -134,7 +134,7 @@ namespace Restaurant_Homework_10_11.Data
                     RestaurantDescription = "Hidden down a narrow alley, this rustic eatery has a warm, inviting charm reminiscent of a countryside cottage. The walls are adorned with vintage photographs and handmade decorations that tell a story of tradition and heritage. The menu is a celebration of comfort food, featuring hearty dishes such as homemade pasta tossed in rich, savory sauces and slow-cooked stews that warm the soul. Each meal is crafted with love and care, using recipes passed down through generations. Don’t miss the freshly baked bread served with whipped herb butter, the perfect accompaniment to your meal. This restaurant is a testament to the power of home-cooked flavors.",
                     WorkingTime = "08 - 23:45",
                     Rating = 9.81f,
-                    Image = restaurantImage1,
+                    Image = restaurantImage4,
                     IsDeleted = false,
                     SignatureDish = spaghetti
                 };
@@ -147,7 +147,7 @@ namespace Restaurant_Homework_10_11.Data
                     RestaurantDescription = "This lively, modern diner reimagines the classic American experience with a playful twist. Bright colors and retro decor create a fun atmosphere, inviting guests of all ages to enjoy a memorable meal. The menu is filled with inventive takes on beloved favorites, from gourmet burgers topped with artisanal cheeses to crispy fried chicken served with a side of spicy honey. For those with a sweet tooth, the dessert menu features over-the-top milkshakes and whimsical pastries that are as delightful to look at as they are to taste. With a focus on locally sourced ingredients and a friendly, energetic vibe, this restaurant is a celebration of all things delicious and nostalgic.",
                     WorkingTime = "10 - 23",
                     Rating = 9.93f,
-                    Image = restaurantImage1,
+                    Image = restaurantImage5,
                     IsDeleted = false,
                     SignatureDish = paella
                 };

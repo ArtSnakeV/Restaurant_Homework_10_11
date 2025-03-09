@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+﻿using Restaurant_Homework_10_11.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Restaurant_Homework_10_11.Data.Entities
+namespace Restaurant_Homework_10_11.Models.DTO
 {
-    public class Dish
+    public class DishDTO
     {
         public int Id { get; set; }
         [Display(Name = "Dish")]
@@ -12,6 +12,6 @@ namespace Restaurant_Homework_10_11.Data.Entities
         public string? DishDescription { get; set; } // textarea
         public byte[]? Image { get; set; }
 
-        public ICollection<Restaurant>? Restaurants { get; set; } = default!;
+        public ICollection<RestaurantDTO>? Restaurants { get; set; } = default;
     }
 }

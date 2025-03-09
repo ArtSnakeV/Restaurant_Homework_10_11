@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_Homework_10_11.Data;
 using Restaurant_Homework_10_11.Data.Entities;
+using Restaurant_Homework_10_11.Models.DTO;
 using Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels;
 
 namespace Restaurant_Homework_10_11.Controllers
@@ -17,10 +20,13 @@ namespace Restaurant_Homework_10_11.Controllers
 
         private readonly ILogger _logger; // Added logger
 
-        public RestaurantsController(RestaurantsContext context, ILoggerFactory loggerFactory) // Added logger factory
+        private readonly IMapper _mapper; // Added to use AutoMapper
+
+        public RestaurantsController(RestaurantsContext context, ILoggerFactory loggerFactory, IMapper mapper) // Added logger factory
         {
             _context = context;
             _logger = loggerFactory.CreateLogger<RestaurantsController>();
+            _mapper = mapper; // Added to use AutoMapper
         }
 
         
@@ -46,39 +52,218 @@ namespace Restaurant_Homework_10_11.Controllers
             {
                 restaurants = restaurants.Where(c => c.Name.Contains(search));
             }
-            IQueryable<Dish> dishes = _context.Dishes;
+
+            IQueryable<Dish> dishesIQ = _context.Dishes;
+            IEnumerable<DishDTO> dishesDTO = _mapper
+                .Map<IEnumerable<DishDTO>>(await dishesIQ.ToListAsync());
+
             SelectList dishesSL = new SelectList(
-            items: await dishes.ToListAsync(),
+            items: dishesDTO,
             dataValueField: "Id",
             dataTextField: "DishName",
             selectedValue: dishId);
+
             IndexRestaurantsVM vM = new IndexRestaurantsVM
             {
-                Restaurants = await restaurants.ToListAsync(),
+                Restaurants = _mapper.Map<IEnumerable<RestaurantDTO>>(await restaurants.ToListAsync()),
                 DishSL = dishesSL,
                 DishId = dishId,
                 Search = search,
             };
             return View(vM);
+
+
+            // While using DTO, still without AutoMapper
+            //IQueryable<Restaurant> restaurants = _context.Restaurants
+            //    .Include(c => c.SignatureDish)
+            //    //.Include(c => c.Dish)
+            //    .Where(c => c.IsDeleted == false);
+            //if (dishId > 0)
+            //{
+            //    restaurants = restaurants.Where(c => c.DishId == dishId);
+            //}
+            //if (
+            //search is not null)
+            //{
+            //    restaurants = restaurants.Where(c => c.Name.Contains(search));
+            //}
+            //IQueryable<Dish> dishes = _context.Dishes;
+            //SelectList dishesSL = new SelectList(
+            //items: await dishes.ToListAsync(),
+            //dataValueField: "Id",
+            //dataTextField: "DishName",
+            //selectedValue: dishId);
+
+            //IEnumerable<RestaurantDTO> restaurantDTOs = restaurants.ToList().Select(c =>
+            //{
+            //    return new RestaurantDTO
+            //    {
+            //        Id = c.Id,
+            //        Name = c.Name,
+            //        RestaurantDescription = c.RestaurantDescription,
+            //        Star = c.Star, // To avoid error here, Michelin star values were commented as well in the RestaurantDTO.cs
+            //        WorkingTime = c.WorkingTime,
+            //        FirstOpeningDate = c.FirstOpeningDate,
+            //        Rating = c.Rating,
+            //        Image = c.Image,
+            //        SignatureDish = new DishDTO
+            //        {
+            //            Id = c.SignatureDish!.Id,
+            //            DishName = c.SignatureDish.DishName,
+            //        }
+            //    };
+            //}).ToList();
+            //IndexRestaurantsVM vM = new IndexRestaurantsVM
+            //{
+            //    Restaurants = restaurantDTOs, //Restaurants = await restaurants.ToListAsync(),
+            //    DishSL = dishesSL,
+            //    DishId = dishId,
+            //    Search = search,
+            //};
+            //return View(vM);
+
+
+            // Before using DTO
+            //IQueryable<Restaurant> restaurants = _context.Restaurants
+            //    .Include(c => c.SignatureDish)
+            //    //.Include(c => c.Dish)
+            //    .Where(c => c.IsDeleted == false);
+            //if (dishId > 0)
+            //{
+            //    restaurants = restaurants.Where(c => c.DishId == dishId);
+            //}
+            //if (
+            //search is not null)
+            //{
+            //    restaurants = restaurants.Where(c => c.Name.Contains(search));
+            //}
+            //IQueryable<Dish> dishes = _context.Dishes;
+            //SelectList dishesSL = new SelectList(
+            //items: await dishes.ToListAsync(),
+            //dataValueField: "Id",
+            //dataTextField: "DishName",
+            //selectedValue: dishId);
+            //IndexRestaurantsVM vM = new IndexRestaurantsVM
+            //{
+            //    Restaurants = await restaurants.ToListAsync(),
+            //    DishSL = dishesSL,
+            //    DishId = dishId,
+            //    Search = search,
+            //};
+            //return View(vM);
         }
 
         // GET: Restaurants/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Restaurants == null)
             {
                 return NotFound();
             }
 
-            var restaurant = await _context.Restaurants
-                .Include(r => r.SignatureDish)
+            Restaurant? restaurant = await _context.Restaurants
+                .Include(c => c.SignatureDish)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (restaurant == null)
             {
                 return NotFound();
             }
 
-            return View(restaurant);
+
+            DetailsRestaurantVM vM = new DetailsRestaurantVM
+            {
+                Restaurant = _mapper.Map<RestaurantDTO>(restaurant) // restaurant
+            };
+            return View(vM);
+
+
+
+            //WithDTO
+            //if (id == null || _context.Restaurants == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //Restaurant? restaurant = await _context.Restaurants
+            //    .Include(c => c.SignatureDish)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+
+            //if (restaurant == null)
+            //{
+            //    return NotFound();
+            //}
+
+            ////
+            //DishDTO dishDTO = new DishDTO
+            //{
+            //    Id = restaurant.SignatureDish!.Id,
+            //    DishName = restaurant.SignatureDish.DishName,
+            //    Image = restaurant.SignatureDish.Image,
+            //    DishDescription = restaurant.SignatureDish.DishDescription
+            //};
+
+            //RestaurantDTO restaurantDTO = new RestaurantDTO
+            //{
+            //    Id = restaurant.Id,
+            //    Name = restaurant.Name,
+            //    Star = restaurant.Star,
+            //    FirstOpeningDate = restaurant.FirstOpeningDate,
+            //    RestaurantDescription = restaurant.RestaurantDescription,
+            //    WorkingTime = restaurant.WorkingTime,
+            //    Rating = restaurant.Rating,
+            //    Image = restaurant.Image,
+            //    DishId = restaurant.DishId,
+            //    SignatureDish = dishDTO
+            //};
+
+            //DetailsRestaurantVM vM = new DetailsRestaurantVM
+            //{
+            //    Restaurant = restaurantDTO // restaurant
+            //};
+            //return View(vM);
+
+
+
+
+            //////////////////////////////////////////////////////
+            // Before using DTO
+            //if (id == null || _context.Restaurants == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //Restaurant? restaurant = await _context.Restaurants
+            //    .Include(c => c.SignatureDish)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+
+            //if (restaurant == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //DetailsRestaurantVM vM = new DetailsRestaurantVM
+            //{
+            //    Restaurant = restaurant
+            //};
+            //return View(vM);
+
+            // At the very beginning
+            /////////////////////////////////////////////////
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var restaurant = await _context.Restaurants
+            //    .Include(r => r.SignatureDish)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            //if (restaurant == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(restaurant);
         }
 
         // GET: Restaurants/Create
@@ -93,8 +278,26 @@ namespace Restaurant_Homework_10_11.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Star,FirstOpeningDate,RestaurantDescription,WorkingTime,Rating,Image,IsDeleted,DishId")] Restaurant restaurant)
+        public async Task<IActionResult> Create(
+            [Bind(
+                nameof(Restaurant.Name),
+                nameof(Restaurant.RestaurantDescription),
+                nameof(Restaurant.FirstOpeningDate),
+                nameof(Restaurant.Star),
+                nameof(Restaurant.WorkingTime),
+                nameof(Restaurant.Rating),
+                nameof(Restaurant.DishId)
+                //nameof(Restaurant.IsDeleted) // Protection from overpost
+            //)] Restaurant restaurant, // Changed while using DTO
+            )] RestaurantDTO restaurant,
+            IFormFile image)
         {
+            // Own writing, lot listed in example
+            CreateRestaurantVM vM = new CreateRestaurantVM
+            {
+                Restaurant = restaurant
+            };
+            //To be checked
             if (ModelState.IsValid)
             {
                 _context.Add(restaurant);
@@ -102,8 +305,23 @@ namespace Restaurant_Homework_10_11.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id", restaurant.DishId);
-            return View(restaurant);
+
+            return View(vM);
         }
+
+
+        //public async Task<IActionResult> Create([Bind("Id,Name,Star,FirstOpeningDate,RestaurantDescription,WorkingTime,Rating,Image,IsDeleted,DishId")] Restaurant restaurant) // With is deleted
+        //public async Task<IActionResult> Create([Bind("Id,Name,Star,FirstOpeningDate,RestaurantDescription,WorkingTime,Rating,Image,DishId")] Restaurant restaurant)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(restaurant);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id", restaurant.DishId);
+        //    return View(restaurant);
+        //}
 
         // GET: Restaurants/Edit/5
         public async Task<IActionResult> Edit(int? id)
