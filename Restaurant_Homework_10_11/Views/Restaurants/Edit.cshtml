@@ -1,4 +1,6 @@
-﻿@model Restaurant_Homework_10_11.Data.Entities.Restaurant
+﻿@using Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels
+@* @model Restaurant_Homework_10_11.Data.Entities.Restaurant *@
+@model EditRestaurantVM
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,62 +12,75 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+           
+            <input type="hidden" asp-for="Restaurant.Id" />
+            <input type="hidden" asp-for="Restaurant.Image" />
+            @* <input type="hidden" asp-for="Id" /> *@
+
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Restaurant.Name" class="control-label"></label>
+                <input asp-for="Restaurant.Name" class="form-control" />
+                <span asp-validation-for="Restaurant.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Star" class="control-label"></label>
-                <select asp-for="Star" class="form-control">
+                <label asp-for="Restaurant.Star" class="control-label"></label>
+                @* <label asp-for="Star" class="control-label"></label> *@
+                <select asp-for="Restaurant.Star" class="form-control">
+                @* <select asp-for="Star" class="form-control"> *@
                     <option value="Zero">Zero</option>
                     <option value="One">One</option>
                     <option value="Two">Two</option>
                     <option value="Three">Three</option>
                 </select>
-                <span asp-validation-for="Star" class="text-danger"></span>
+                <span asp-validation-for="Restaurant.Star" class="text-danger"></span>
+                @* <span asp-validation-for="Star" class="text-danger"></span> *@
             </div>
             <div class="form-group">
-                <label asp-for="FirstOpeningDate" class="control-label"></label>
-                <input asp-for="FirstOpeningDate" class="form-control" />
-                <span asp-validation-for="FirstOpeningDate" class="text-danger"></span>
+                <label asp-for="Restaurant.FirstOpeningDate" class="control-label"></label>
+                <input asp-for="Restaurant.FirstOpeningDate" class="form-control" />
+                <span asp-validation-for="Restaurant.FirstOpeningDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RestaurantDescription" class="control-label"></label>
-                <input asp-for="RestaurantDescription" class="form-control" />
-                <span asp-validation-for="RestaurantDescription" class="text-danger"></span>
+                <label asp-for="Restaurant.RestaurantDescription" class="control-label"></label>
+                <input asp-for="Restaurant.RestaurantDescription" class="form-control" />
+                <span asp-validation-for="Restaurant.RestaurantDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="WorkingTime" class="control-label"></label>
-                <input asp-for="WorkingTime" class="form-control" />
-                <span asp-validation-for="WorkingTime" class="text-danger"></span>
+                <label asp-for="Restaurant.WorkingTime" class="control-label"></label>
+                <input asp-for="Restaurant.WorkingTime" class="form-control" />
+                <span asp-validation-for="Restaurant.WorkingTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
-                <span asp-validation-for="Rating" class="text-danger"></span>
+                <label asp-for="Restaurant.Rating" class="control-label"></label>
+                <input asp-for="Restaurant.Rating" class="form-control" />
+                <span asp-validation-for="Restaurant.Rating" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
                 <input asp-for="Image" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
-            </div>
+            @* <div class="form-group form-check"> *@
+            @*     <label class="form-check-label"> *@
+            @*         <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted) *@
+            @*     </label> *@
+            @* </div> *@
             <div class="form-group">
-                <label asp-for="DishId" class="control-label"></label>
-                <select asp-for="DishId" class="form-control" asp-items="ViewBag.DishId"></select>
-                <span asp-validation-for="DishId" class="text-danger"></span>
+                <label asp-for="Restaurant.SignatureDish" class="control-label"></label>
+                @* <select asp-for="Restaurant.DishId" class="form-control" asp-items="ViewBag.DishId"></select> *@
+                <select asp-for="Restaurant.DishId" asp-items="@Model.DishSL">
+
+                </select>
+                <span asp-validation-for="Restaurant.DishId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="mb-3">
+                <input type="submit" value="Save" class="btn btn-warning" />
             </div>
+            @* <div class="form-group"> *@
+            @*     <input type="submit" value="Save" class="btn btn-primary" /> *@
+            @* </div> *@
         </form>
     </div>
 </div>

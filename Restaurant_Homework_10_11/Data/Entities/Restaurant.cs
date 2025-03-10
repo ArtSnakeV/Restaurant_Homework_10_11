@@ -11,7 +11,8 @@ namespace Restaurant_Homework_10_11.Data.Entities
         [Display(Name="Restaurant name")]
         public string Name { get; set; } = default!;
 
-        public MichelinStar Star { get; set; } // radio buttons
+        public string MichelinStar { get; set; } = default!;
+        //public MichelinStar Star { get; set; } // radio buttons
 
         public DateTime FirstOpeningDate { get; set; }
 
@@ -19,7 +20,7 @@ namespace Restaurant_Homework_10_11.Data.Entities
 
         public string WorkingTime { get; set; } = default!;
 
-        public float Rating { get; set; }
+        public float? Rating { get; set; }
 
         public byte[]? Image { get; set; }
 

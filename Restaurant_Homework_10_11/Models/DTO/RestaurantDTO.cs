@@ -1,5 +1,4 @@
-﻿using Restaurant_Homework_10_11.Data.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Restaurant_Homework_10_11.Models.DTO
 {
@@ -19,7 +18,7 @@ namespace Restaurant_Homework_10_11.Models.DTO
 
         public string WorkingTime { get; set; } = default!;
 
-        public float Rating { get; set; }
+        public float? Rating { get; set; }
 
         public byte[]? Image { get; set; }
 

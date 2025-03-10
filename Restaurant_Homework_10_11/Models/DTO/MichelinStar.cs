@@ -1,4 +1,4 @@
-﻿namespace Restaurant_Homework_10_11.Data.Entities
+﻿namespace Restaurant_Homework_10_11.Models.DTO
 {
     public enum MichelinStar
     {

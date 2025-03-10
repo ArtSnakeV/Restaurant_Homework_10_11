@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_Homework_10_11.Data.Entities;
+using Restaurant_Homework_10_11.Models.DTO;
 using System.ComponentModel.DataAnnotations;
 
 namespace Restaurant_Homework_10_11.Data
@@ -18,7 +19,7 @@ namespace Restaurant_Homework_10_11.Data
 
             using (RestaurantsContext context = new RestaurantsContext(options))
             {
-                // context.Database.EnsureDeleted();
+                //context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
 
                 if (context.Restaurants.Any())
@@ -90,7 +91,8 @@ namespace Restaurant_Homework_10_11.Data
                 Restaurant rest1 = new Restaurant
                 {
                     Name = "Night is quiet",
-                    Star = MichelinStar.Three,
+                    MichelinStar = MichelinStar.Three.ToString(),
+                    //Star = MichelinStar.Three,
                     FirstOpeningDate = DateTime.Parse("10 - 11 - 1900"),
                     RestaurantDescription = "Nestled in a charming corner of the city, this culinary gem invites you to indulge in a fusion of traditional and contemporary flavors. With warm wooden accents and soft lighting, the ambiance exudes a cozy yet sophisticated vibe. The menu showcases an array of seasonal dishes, each artfully presented, highlighting the freshest local ingredients. Signature offerings include a delicate seafood risotto infused with saffron and a decadent chocolate torte that melts in your mouth. Pair your meal with a curated selection of organic wines, and let the knowledgeable staff guide you through an unforgettable gastronomic journey.",
                     WorkingTime = "10 - 23",
@@ -103,7 +105,8 @@ namespace Restaurant_Homework_10_11.Data
                 Restaurant rest2 = new Restaurant
                 {
                     Name = "Soft clouds",
-                    Star = MichelinStar.Two,
+                    MichelinStar = MichelinStar.Two.ToString(),
+                    //Star = MichelinStar.Two,
                     FirstOpeningDate = DateTime.Parse("12 - 08 - 1998"),
                     RestaurantDescription = "Perched atop a bustling rooftop, this eatery offers breathtaking panoramic views of the skyline while serving an eclectic menu inspired by global street food. The vibrant decor, adorned with colorful murals and strings of twinkling lights, sets the stage for a lively dining experience. Guests can savor tantalizing small plates, from spicy Korean tacos to zesty Mediterranean mezze, perfect for sharing. The cocktail menu is equally adventurous, featuring inventive concoctions that blend unexpected flavors, making each sip a delightful surprise. Whether you're watching the sunset or enjoying a night under the stars, this restaurant promises a feast for all the senses.",
                     WorkingTime = "10 - 24",
@@ -116,7 +119,8 @@ namespace Restaurant_Homework_10_11.Data
                 Restaurant rest3 = new Restaurant
                 {
                     Name = "Connecting people",
-                    Star = MichelinStar.One,
+                    MichelinStar = MichelinStar.One.ToString(),
+                    //Star = MichelinStar.One,
                     FirstOpeningDate = DateTime.Parse("03 - 12 - 2008"),
                     RestaurantDescription = "Step into a world of elegance at this upscale bistro, where classic French cuisine meets modern culinary techniques. The sophisticated interior, with its plush seating and gilded accents, creates an atmosphere of refined luxury. Diners can expect an exquisite menu that includes buttery escargots, perfectly seared duck breast, and a selection of artisanal cheeses that would delight any connoisseur. The attentive staff, dressed in crisp uniforms, offers impeccable service while guiding you through a carefully curated wine list. Ideal for a romantic evening or a special celebration, this restaurant is where unforgettable memories are made.",
                     WorkingTime = "14 - 23:30",
@@ -129,7 +133,8 @@ namespace Restaurant_Homework_10_11.Data
                 Restaurant rest4 = new Restaurant
                 {
                     Name = "Touchless",
-                    Star = MichelinStar.One,
+                    MichelinStar = MichelinStar.One.ToString(),
+                    //Star = MichelinStar.One,
                     FirstOpeningDate = DateTime.Parse("11 - 08 - 2003"),
                     RestaurantDescription = "Hidden down a narrow alley, this rustic eatery has a warm, inviting charm reminiscent of a countryside cottage. The walls are adorned with vintage photographs and handmade decorations that tell a story of tradition and heritage. The menu is a celebration of comfort food, featuring hearty dishes such as homemade pasta tossed in rich, savory sauces and slow-cooked stews that warm the soul. Each meal is crafted with love and care, using recipes passed down through generations. Don’t miss the freshly baked bread served with whipped herb butter, the perfect accompaniment to your meal. This restaurant is a testament to the power of home-cooked flavors.",
                     WorkingTime = "08 - 23:45",
@@ -142,7 +147,8 @@ namespace Restaurant_Homework_10_11.Data
                 Restaurant rest5 = new Restaurant
                 {
                     Name = "Raising Star",
-                    Star = MichelinStar.Zero,
+                    MichelinStar = MichelinStar.Zero.ToString(),
+                    //Star = MichelinStar.Zero,
                     FirstOpeningDate = DateTime.Parse("10 - 01 - 2021"),
                     RestaurantDescription = "This lively, modern diner reimagines the classic American experience with a playful twist. Bright colors and retro decor create a fun atmosphere, inviting guests of all ages to enjoy a memorable meal. The menu is filled with inventive takes on beloved favorites, from gourmet burgers topped with artisanal cheeses to crispy fried chicken served with a side of spicy honey. For those with a sweet tooth, the dessert menu features over-the-top milkshakes and whimsical pastries that are as delightful to look at as they are to taste. With a focus on locally sourced ingredients and a friendly, energetic vibe, this restaurant is a celebration of all things delicious and nostalgic.",
                     WorkingTime = "10 - 23",

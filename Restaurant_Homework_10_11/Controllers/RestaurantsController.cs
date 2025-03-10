@@ -163,7 +163,7 @@ namespace Restaurant_Homework_10_11.Controllers
 
             Restaurant? restaurant = await _context.Restaurants
                 .Include(c => c.SignatureDish)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.IsDeleted == false);
 
             if (restaurant == null)
             {
@@ -267,10 +267,27 @@ namespace Restaurant_Homework_10_11.Controllers
         }
 
         // GET: Restaurants/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id");
-            return View();
+            //ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id");
+            //return View
+
+            IQueryable<Dish> dishesIQ = _context.Dishes;
+
+            IEnumerable<DishDTO> dishesDTO = _mapper
+                .Map<IEnumerable<DishDTO>>(await dishesIQ.ToListAsync());
+
+            SelectList dishesSL = new SelectList(
+                items: dishesDTO,
+                dataValueField: "Id",
+                dataTextField: "DishName");
+
+            CreateRestaurantVM vM = new CreateRestaurantVM
+            {
+                DishSL = dishesSL,
+            };
+
+            return View(vM);
         }
 
         // POST: Restaurants/Create
@@ -278,36 +295,79 @@ namespace Restaurant_Homework_10_11.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind(
-                nameof(Restaurant.Name),
-                nameof(Restaurant.RestaurantDescription),
-                nameof(Restaurant.FirstOpeningDate),
-                nameof(Restaurant.Star),
-                nameof(Restaurant.WorkingTime),
-                nameof(Restaurant.Rating),
-                nameof(Restaurant.DishId)
-                //nameof(Restaurant.IsDeleted) // Protection from overpost
-            //)] Restaurant restaurant, // Changed while using DTO
-            )] RestaurantDTO restaurant,
-            IFormFile image)
+        public async Task<IActionResult> Create(CreateRestaurantVM vM)
         {
-            // Own writing, lot listed in example
-            CreateRestaurantVM vM = new CreateRestaurantVM
+            if (ModelState.IsValid == false)
             {
-                Restaurant = restaurant
-            };
-            //To be checked
-            if (ModelState.IsValid)
-            {
-                _context.Add(restaurant);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id", restaurant.DishId);
+                IQueryable<Dish> dishesIQ = _context.Dishes;
 
-            return View(vM);
+                IEnumerable<DishDTO> dishesDTO = _mapper
+                    .Map<IEnumerable<DishDTO>>(await dishesIQ.ToListAsync());
+
+                SelectList dishesSL = new SelectList(
+                    items: dishesDTO,
+                    dataValueField: "Id",
+                    dataTextField: "DishName",
+                    selectedValue: vM.Restaurant.DishId);
+
+                vM.DishSL = dishesSL;
+
+                foreach (var item in ModelState.Values.SelectMany(e => e.Errors))
+                {
+                    _logger.LogError(item.ErrorMessage);
+                }
+
+                return View(vM);
+            }
+            byte[]? data = null;
+            using (BinaryReader br = new BinaryReader(vM.Image.OpenReadStream()))
+            {
+                data = br.ReadBytes((int)vM.Image.Length);
+                vM.Restaurant.Image = data;
+            }
+
+            Restaurant creatingRestaurant = _mapper.Map<Restaurant>(vM.Restaurant);
+
+            _context.Add(creatingRestaurant);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
+
+        //Before using AutoMapper
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(
+        //    [Bind(
+        //        nameof(Restaurant.Name),
+        //        nameof(Restaurant.RestaurantDescription),
+        //        nameof(Restaurant.FirstOpeningDate),
+        //        nameof(Restaurant.Star),
+        //        nameof(Restaurant.WorkingTime),
+        //        nameof(Restaurant.Rating),
+        //        nameof(Restaurant.DishId)
+        //        //nameof(Restaurant.IsDeleted) // Protection from overpost
+        //    //)] Restaurant restaurant, // Changed while using DTO
+        //    )] RestaurantDTO restaurant,
+        //    IFormFile image)
+        //{
+        //    // Own writing, lot listed in example
+        //    CreateRestaurantVM vM = new CreateRestaurantVM
+        //    {
+        //        Restaurant = restaurant
+        //    };
+        //    //To be checked
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(restaurant);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id", restaurant.DishId);
+
+        //    return View(vM);
+        //}
+
 
 
         //public async Task<IActionResult> Create([Bind("Id,Name,Star,FirstOpeningDate,RestaurantDescription,WorkingTime,Rating,Image,IsDeleted,DishId")] Restaurant restaurant) // With is deleted
@@ -326,18 +386,50 @@ namespace Restaurant_Homework_10_11.Controllers
         // GET: Restaurants/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Restaurants == null)
             {
                 return NotFound();
             }
 
-            var restaurant = await _context.Restaurants.FindAsync(id);
-            if (restaurant == null)
+            Restaurant? restaurant = await _context.Restaurants.FindAsync(id);
+            if (restaurant == null ||  restaurant.IsDeleted == true)
             {
                 return NotFound();
             }
-            ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id", restaurant.DishId);
-            return View(restaurant);
+
+            IQueryable<Dish> dishesIQ = _context.Dishes;
+
+            IEnumerable<DishDTO> dishesDTO = _mapper
+                .Map<IEnumerable<DishDTO>>(await dishesIQ.ToListAsync());
+
+            SelectList dishesSl = new SelectList(
+                dishesDTO,
+                "Id",
+                "DishName",
+                restaurant.DishId);
+
+            EditRestaurantVM vM = new EditRestaurantVM
+            {
+                Restaurant = _mapper.Map<RestaurantDTO>(restaurant),
+                DishSL = dishesSl,
+            };
+
+            return View(vM);
+
+
+            // Before DTO
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var restaurant = await _context.Restaurants.FindAsync(id);
+            //if (restaurant == null)
+            //{
+            //    return NotFound();
+            //}
+            //ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id", restaurant.DishId);
+            //return View(restaurant);
         }
 
         // POST: Restaurants/Edit/5
@@ -345,54 +437,132 @@ namespace Restaurant_Homework_10_11.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Star,FirstOpeningDate,RestaurantDescription,WorkingTime,Rating,Image,IsDeleted,DishId")] Restaurant restaurant)
+        public async Task<IActionResult> Edit(int id, EditRestaurantVM vM)
         {
-            if (id != restaurant.Id)
+            if (id != vM.Restaurant.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
-                try
-                {
-                    _context.Update(restaurant);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RestaurantExists(restaurant.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                IQueryable<Dish> dishesIQ = _context.Dishes;
+
+                IEnumerable<DishDTO> dishesDTO = _mapper
+                    .Map<IEnumerable<DishDTO>>(await dishesIQ.ToListAsync());
+
+                SelectList dishesSL = new SelectList(
+                    dishesDTO,
+                    "Id",
+                    "DishName",
+                    vM.Restaurant.DishId);
+
+                vM.DishSL = dishesSL;
+
+                return View(vM);
             }
-            ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id", restaurant.DishId);
-            return View(restaurant);
+
+            if(vM.Image is not null)
+            {
+                byte[]? data = null;
+                using (BinaryReader br = new BinaryReader(vM.Image.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)vM.Image.Length);
+                    vM.Restaurant.Image = data;
+                }
+            }
+
+            try
+            {
+                Restaurant restaurantToEdit = _mapper.Map<Restaurant>(vM.Restaurant);
+
+                _context.Update(restaurantToEdit);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RestaurantExists(vM.Restaurant.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
+
+            // Before modifying
+            //if (id != restaurant.Id)
+            //{
+            //    return NotFound();
+            //}
+
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+            //        _context.Update(restaurant);
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!RestaurantExists(restaurant.Id))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Id", restaurant.DishId);
+            //return View(restaurant);
         }
 
         // GET: Restaurants/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Restaurants == null)
             {
                 return NotFound();
             }
 
-            var restaurant = await _context.Restaurants
+            Restaurant? restaurant = await _context.Restaurants
                 .Include(r => r.SignatureDish)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            
             if (restaurant == null)
             {
                 return NotFound();
             }
 
-            return View(restaurant);
+            DeleteRestaurantVM vM = new DeleteRestaurantVM
+            {
+                Restaurant = _mapper.Map<RestaurantDTO>(restaurant)
+            };
+
+            return View(vM);
+
+
+            //Before changes
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var restaurant = await _context.Restaurants
+            //    .Include(r => r.SignatureDish)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            //if (restaurant == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(restaurant);
         }
 
         // POST: Restaurants/Delete/5
@@ -400,14 +570,29 @@ namespace Restaurant_Homework_10_11.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var restaurant = await _context.Restaurants.FindAsync(id);
-            if (restaurant != null)
+            if (_context.Restaurants == null)
             {
-                _context.Restaurants.Remove(restaurant);
+                return Problem("Entity set `RestaurantContext.Restaurants' is null.");
+            }
+
+            Restaurant? restaurant = await _context.Restaurants.FindAsync(id);
+            if(restaurant != null)
+            {
+                restaurant.IsDeleted = true;
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+
+            // Before changes
+            //var restaurant = await _context.Restaurants.FindAsync(id);
+            //if (restaurant != null)
+            //{
+            //    _context.Restaurants.Remove(restaurant);
+            //}
+
+            //await _context.SaveChangesAsync();
+            //return RedirectToAction(nameof(Index));
         }
 
         private bool RestaurantExists(int id)

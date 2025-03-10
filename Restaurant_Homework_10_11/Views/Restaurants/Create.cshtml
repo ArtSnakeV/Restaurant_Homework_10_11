@@ -1,6 +1,8 @@
-﻿@using Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels
+﻿@* @using Restaurant_Homework_10_11.Models.DTO *@
+@using Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels
 @* @model Restaurant_Homework_10_11.Data.Entities.Restaurant *@
-@model CreateRestaurantVM
+@* @model CreateRestaurantVM *@
+@model Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels.CreateRestaurantVM
 @{
     ViewData["Title"] = "Create";
 }
@@ -11,27 +13,45 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Restaurant.Name" class="control-label"></label>
                 <input asp-for="Restaurant.Name" class="form-control" />
                 <span asp-validation-for="Restaurant.Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                @* Modified to have chanse choose `Stars` *@
-                <label asp-for="Restaurant.Star" class="control-label"></label>
-                <select asp-for="Restaurant.Star" class="form-control">
-                    <option value="Zero" selected>Zero</option>
-                    <option value="One">One</option>
-                    <option value="Two">Two</option>
-                    <option value="Three">Three</option>
-                </select>
+                @foreach (var Star in Enum.GetValues(typeof(MichelinStar)))
+                {
+                    <div class="form-check">
+                        <input asp-for="Restaurant.Star"
+                               type="radio"
+                               value="@Star"
+                               class="form-check-input" />
+                        <label asp-for="Restaurant.Star"
+                               class="form-check-label">
+                            @Star
+                        </label>
+                    </div>
+                }
                 <span asp-validation-for="Restaurant.Star" class="text-danger"></span>
-                @* <label asp-for="Star" class="control-label"></label>  *@
-                @* <select asp-for="Star" class="form-control"></select>  *@
-                @* <span asp-validation-for="Star" class="text-danger"></span>  *@
             </div>
+
+                @* Own modifications before reached in example *@
+                @* @ * Modified to have chanse choose `Stars` * @ *@
+                @* <label asp-for="Restaurant.Star" class="control-label"></label> *@
+                @* <select asp-for="Restaurant.Star" class="form-control"> *@
+                @*     <option value="Zero" selected>Zero</option> *@
+                @*     <option value="One">One</option> *@
+                @*     <option value="Two">Two</option> *@
+                @*     <option value="Three">Three</option> *@
+                @* </select> *@
+                @* <span asp-validation-for="Restaurant.Star" class="text-danger"></span> *@
+                @* @ * <label asp-for="Star" class="control-label"></label>   * @ *@
+                @* @ * <select asp-for="Star" class="form-control"></select>  * @ *@
+                @* @ * <span asp-validation-for="Star" class="text-danger"></span>  * @ *@
+           
             <div class="form-group">
                 <label asp-for="Restaurant.FirstOpeningDate" class="control-label"></label>
                 <input asp-for="Restaurant.FirstOpeningDate" class="form-control" />
@@ -53,20 +73,29 @@
                 <span asp-validation-for="Restaurant.Rating" class="text-danger"></span>
             </div>
             <div class="form-group">
+                @* <label asp-for="Restaurant.Image" class="control-label"></label> *@
+                @* <input asp-for="Restaurant.Image" class="form-control" /> *@
                 <label asp-for="Restaurant.Image" class="control-label"></label>
-                <input asp-for="Restaurant.Image" class="form-control" />
+                <input asp-for="Restaurant.Image" type="file" class="form-control" />
+
                 <span asp-validation-for="Restaurant.Image" class="text-danger"></span>
-            </div>
+             </div>
             @* <div class="form-group form-check"> *@
             @*     <label class="form-check-label"> *@
             @*         <input class="form-check-input" asp-for="Restaurant.IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted) *@
             @*     </label> *@
             @* </div> *@
             <div class="form-group">
-                <label asp-for="Restaurant.DishId" class="control-label"></label>
-                <select asp-for="Restaurant.DishId" class="form-control" asp-items="ViewBag.DishId"></select>
+                <label asp-for="Restaurant.SignatureDish" class="contorl-label"></label>
+                <select asp-for="Restaurant.DishId" asp-items="@Model.DishSL" class="form-control">
+                    <option selected="selected" disabled="disabled">Choose Signature Dish</option>
+                </select>
+                <span asp-validation-for="Restaurant.DishId" class="text-danger"></span>
+                @* <label asp-for="Restaurant.DishId" class="control-label"></label>                 *@
+                @* <select asp-for="Restaurant.DishId" class="form-control" asp-items="ViewBag.DishId"></select> *@
             </div>
-            <div class="form-group">
+            @* <div class="form-group"> *@
+            <div class="mb3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -74,7 +103,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
 </div>
 
 @section Scripts {
