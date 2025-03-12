@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Restaurant_Homework_10_11.Models.DTO
+namespace RestaurantMVCViewer.Models.DTO
 {
     public class RestaurantDTO
     {
@@ -10,7 +10,7 @@ namespace Restaurant_Homework_10_11.Models.DTO
         [Display(Name = "Restaurant name")]
         public string Name { get; set; } = default!;
 
-        public MichelinStar Star { get; set; } // radio buttons
+        public MichelinStar MichelinStar { get; set; } // radio buttons
 
         public DateTime FirstOpeningDate { get; set; }
 
@@ -26,7 +26,7 @@ namespace Restaurant_Homework_10_11.Models.DTO
 
         // The restaurant signature dish
         public int DishId { get; set; }
-        public DishDTO SignatureDish { get; set; } = default!;
+        public DishDTO? SignatureDish { get; set; } = default!;
     }
     //public enum MichelinStar
     //{

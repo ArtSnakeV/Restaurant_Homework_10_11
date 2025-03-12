@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Restaurant_Homework_10_11.AutoMapperProfiles;
-using Restaurant_Homework_10_11.Data;
+using RestaurantMVCViewer.AutoMapperProfiles;
+using RestaurantMVCViewer.Data;
+using System.Globalization;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 //Added to use AutoMapper
 builder.Services.AddAutoMapper(
@@ -16,6 +20,8 @@ builder.Services.AddDbContext<RestaurantsContext>(options =>
         .GetConnectionString("RestaurantsContext") ??
             throw new InvalidOperationException(
                 "Connection string `RestaurantsContext` not found.")));
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

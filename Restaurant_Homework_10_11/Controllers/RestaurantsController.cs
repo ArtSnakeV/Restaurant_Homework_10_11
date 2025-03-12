@@ -7,12 +7,13 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Restaurant_Homework_10_11.Data;
-using Restaurant_Homework_10_11.Data.Entities;
-using Restaurant_Homework_10_11.Models.DTO;
-using Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels;
+using RestaurantMVCViewer.Data;
+using RestaurantMVCViewer.Data.Entities;
+using RestaurantMVCViewer.Models.DTO;
+using RestaurantMVCViewer.Models.ViewModels.DishesViewModels;
+using RestaurantMVCViewer.Models.ViewModels.RestaurantsViewModels;
 
-namespace Restaurant_Homework_10_11.Controllers
+namespace RestaurantMVCViewer.Controllers
 {
     public class RestaurantsController : Controller
     {
@@ -29,7 +30,7 @@ namespace Restaurant_Homework_10_11.Controllers
             _mapper = mapper; // Added to use AutoMapper
         }
 
-        
+
         // GET: Restaurants
         //public async Task<IActionResult> Index()
         //{
@@ -319,6 +320,7 @@ namespace Restaurant_Homework_10_11.Controllers
 
                 return View(vM);
             }
+
             byte[]? data = null;
             using (BinaryReader br = new BinaryReader(vM.Image.OpenReadStream()))
             {
@@ -392,7 +394,7 @@ namespace Restaurant_Homework_10_11.Controllers
             }
 
             Restaurant? restaurant = await _context.Restaurants.FindAsync(id);
-            if (restaurant == null ||  restaurant.IsDeleted == true)
+            if (restaurant == null || restaurant.IsDeleted == true)
             {
                 return NotFound();
             }
@@ -462,7 +464,7 @@ namespace Restaurant_Homework_10_11.Controllers
                 return View(vM);
             }
 
-            if(vM.Image is not null)
+            if (vM.Image is not null)
             {
                 byte[]? data = null;
                 using (BinaryReader br = new BinaryReader(vM.Image.OpenReadStream()))
@@ -534,7 +536,7 @@ namespace Restaurant_Homework_10_11.Controllers
             Restaurant? restaurant = await _context.Restaurants
                 .Include(r => r.SignatureDish)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            
+
             if (restaurant == null)
             {
                 return NotFound();
@@ -576,7 +578,7 @@ namespace Restaurant_Homework_10_11.Controllers
             }
 
             Restaurant? restaurant = await _context.Restaurants.FindAsync(id);
-            if(restaurant != null)
+            if (restaurant != null)
             {
                 restaurant.IsDeleted = true;
             }
@@ -598,6 +600,22 @@ namespace Restaurant_Homework_10_11.Controllers
         private bool RestaurantExists(int id)
         {
             return _context.Restaurants.Any(e => e.Id == id);
+        }
+
+
+
+        // Added to display dishes
+        public async Task<IActionResult> Dishes()
+        {
+            var dishes = await _context.Dishes.ToListAsync();
+            var dishesDTO = _mapper.Map<IEnumerable<DishDTO>>(dishes);
+
+            var viewModel = new SignatureDishesVM
+            {
+                Dishes = dishesDTO // Assuming SignatureDishesVM has a property called Dishes
+            };
+
+            return View(viewModel);
         }
     }
 }

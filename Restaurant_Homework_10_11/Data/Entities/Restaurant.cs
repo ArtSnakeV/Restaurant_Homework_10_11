@@ -1,7 +1,8 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Restaurant_Homework_10_11.Data.Entities
+namespace RestaurantMVCViewer.Data.Entities
 {
     public class Restaurant
     {
@@ -28,6 +29,7 @@ namespace Restaurant_Homework_10_11.Data.Entities
 
         // The restaurant signature dish
         public int DishId { get; set; }
+        [ForeignKey(nameof(DishId))]
         public Dish SignatureDish { get; set; } = default!;
     }
 

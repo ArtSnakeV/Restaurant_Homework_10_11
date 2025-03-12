@@ -1,4 +1,4 @@
-﻿namespace Restaurant_Homework_10_11.Models.DTO
+﻿namespace RestaurantMVCViewer.Models.DTO
 {
     public enum MichelinStar
     {

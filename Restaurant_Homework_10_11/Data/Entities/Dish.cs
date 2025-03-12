@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System.ComponentModel.DataAnnotations;
 
-namespace Restaurant_Homework_10_11.Data.Entities
+namespace RestaurantMVCViewer.Data.Entities
 {
     public class Dish
     {

@@ -1,6 +1,6 @@
-﻿@using Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels
+﻿@using RestaurantMVCViewer.Models.ViewModels.RestaurantsViewModels
 @model DetailsRestaurantVM
-@* @model Restaurant_Homework_10_11.Data.Entities.Restaurant *@
+@* @model RestaurantMVCViewer.Data.Entities.Restaurant *@
 
 @{
     ViewData["Title"] = "Details";
@@ -25,9 +25,9 @@
                 @* Michelin Stars *@
                 <p>
                     <span class="fw-bold">
-                        @Html.DisplayNameFor(m => m.Restaurant.Star!):
+                        @Html.DisplayNameFor(m => m.Restaurant.MichelinStar!):
                     </span>
-                    @Model.Restaurant.Star
+                    @Model.Restaurant.MichelinStar
                 </p>
                 @* Restaurant Description *@
                 <p class="card-text" style="white-space: pre-line">
@@ -64,8 +64,9 @@
                         </h3>
                         <p>
                             @* Signature dish picture *@
-                            <img src="data:images/jpg;base64,@(Model.Restaurant.SignatureDish.Image != null?   Convert.ToBase64String(Model.Restaurant.SignatureDish.Image) : string.Empty)"
-                                 class="img-fluid img-thumbnail" max-width: 30%;
+                            @* <img src="data:images/jpg;base64,@(Model.Restaurant.SignatureDish.Image != null?   Convert.ToBase64String(Model.Restaurant.SignatureDish.Image) : string.Empty)" *@
+                            <img src="data:images/jpg;base64,@(Model.Restaurant.DishId != null?   Convert.ToBase64String(Model.Restaurant.SignatureDish.Image) : string.Empty)"
+                                 class="img-fluid img-thumbnail" max-width: 30%;class="img-fluid img-thumbnail" max-width: 30%;
                                  alt="@Model.Restaurant.SignatureDish!.DishName" />
 
                                  @* Modified to avoid errors *@
@@ -76,7 +77,7 @@
                         <p>
                             @* Signature Dish name *@
                             <span class="fw-bold">
-                                @Html.DisplayNameFor(m => m.Restaurant.SignatureDish!.DishName):
+                                @Html.DisplayNameFor(m => m.Restaurant.SignatureDish!.DishName): 
                             </span>
                             @Model.Restaurant.SignatureDish!.DishName
                         </p>

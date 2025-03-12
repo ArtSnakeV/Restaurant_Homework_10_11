@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Restaurant_Homework_10_11.Data.Entities;
-using Restaurant_Homework_10_11.Models.DTO;
+using RestaurantMVCViewer.Data.Entities;
+using RestaurantMVCViewer.Models.DTO;
 using System.ComponentModel.DataAnnotations;
 
-namespace Restaurant_Homework_10_11.Data
+namespace RestaurantMVCViewer.Data
 {
     public class SeedData // Class to initialize our database with starting data
     {

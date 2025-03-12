@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Restaurant_Homework_10_11.Data.Entities;
-using Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels;
+using RestaurantMVCViewer.Data.Entities;
+using RestaurantMVCViewer.Models.ViewModels.RestaurantsViewModels;
 
-namespace Restaurant_Homework_10_11
+namespace RestaurantMVCViewer
 {
     public class Different_data_to_be_used_in_project_while_Controller_installed
     {

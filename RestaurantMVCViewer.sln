@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85 d17.13
+VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant_Homework_10_11", "Restaurant_Homework_10_11\Restaurant_Homework_10_11.csproj", "{0F4F7EC8-9E33-4D17-8C6D-543E082D988E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantMVCViewer", "Restaurant_Homework_10_11\RestaurantMVCViewer.csproj", "{0F4F7EC8-9E33-4D17-8C6D-543E082D988E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

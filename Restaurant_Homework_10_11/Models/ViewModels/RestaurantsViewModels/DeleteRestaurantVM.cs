@@ -1,6 +1,6 @@
-﻿using Restaurant_Homework_10_11.Models.DTO;
+﻿using RestaurantMVCViewer.Models.DTO;
 
-namespace Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels
+namespace RestaurantMVCViewer.Models.ViewModels.RestaurantsViewModels
 {
     public class DeleteRestaurantVM
     {

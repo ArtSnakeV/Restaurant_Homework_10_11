@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Restaurant_Homework_10_11.Data.Entities;
+using RestaurantMVCViewer.Data.Entities;
 using System.Collections.Generic;
 
-namespace Restaurant_Homework_10_11.Data
+namespace RestaurantMVCViewer.Data
 {
     public class RestaurantsContext : DbContext
     {

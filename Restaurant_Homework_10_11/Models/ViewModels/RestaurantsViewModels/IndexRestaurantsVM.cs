@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Restaurant_Homework_10_11.Data.Entities;
-using Restaurant_Homework_10_11.Models.DTO;
+using RestaurantMVCViewer.Data.Entities;
+using RestaurantMVCViewer.Models.DTO;
 
-namespace Restaurant_Homework_10_11.Models.ViewModels.RestaurantsViewModels
+namespace RestaurantMVCViewer.Models.ViewModels.RestaurantsViewModels
 {
     public class IndexRestaurantsVM
     {
